@@ -39,8 +39,24 @@ public class ObjetivoBajar extends Objetivo {
     }
 
     private void calcularIdeal(float pesoActual, float alturaActual, SexoBiologico sexo) {
-        //TODO: Como resolver? Debería hacerlo un sistema externo igual que en ObjetivoTonificar?
-        this.pesoIdeal = this.pesoIdeal-5;
+        //REVIEW: Como resolver? Debería hacerlo un sistema externo igual que en ObjetivoTonificar?
+    	/* Le metí una ecuación en base a la primera imagen que encontré en google sobre peso ideal por altura y lo diferencié por sexo biológico
+    	 * para que tenga una diferencia en el cálculo.
+    	 * ej: (1,83m - 1m) * 100kg/m = 83kg) para altura 1,83 el peso ideal es 83kg.
+    	 * Por la pregunta de si debe hacerlo un sistema externo la respuesta es no porque el enunciado especifica que lo tiene que hacer
+    	 * nuestro sistema.
+    	 */
+    	float pesoPorAlturaIdeal = (alturaActual - 1 ) * 100;
+    	if (sexo == SexoBiologico.FEMENINO) {
+    		pesoPorAlturaIdeal *= 0.875f;
+    	}
+    	else if (sexo == SexoBiologico.MASCULINO) {
+    		pesoPorAlturaIdeal -= 2;
+    	}
+    	if (pesoActual >= pesoPorAlturaIdeal + 3) {
+    		this.pesoIdeal = (int)pesoActual-3;
+    	}
+        this.pesoIdeal = (int)pesoPorAlturaIdeal;
     }
 
 }
