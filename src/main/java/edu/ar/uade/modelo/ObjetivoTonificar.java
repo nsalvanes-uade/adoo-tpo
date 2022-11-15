@@ -19,6 +19,14 @@ public class ObjetivoTonificar extends Objetivo {
         super(descripcion);
         this.servicioCalculador = servicioCalculador;
     }
+    
+    public float getMasaMuscularIdeal() {
+    	return this.masaMuscularIdeal;
+    }
+    
+    public float getGrasaCorporalIdeal() {
+    	return this.grasaCorporalIdeal;
+    }
 
     @Override
     public void revisarObjetivo(Socio socio) {

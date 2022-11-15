@@ -57,9 +57,37 @@ public class Socio {
     }
 
     public void verProgreso() {
-        // TODO: implementar
+        // REVIEW: implementar
         //  Debería mostrarse progreso en la ejecución de la rutina?
         //  O progreso del objetivo?
+    	/*
+    	 * buena pregunta, supongo que debería mostrar el progreso de las mediciones, su peso actual y la de su objetivo actual.
+    	 */
+    	if (objetivo != null) {
+	    	if (objetivo instanceof ObjetivoBajar) {
+	    		for (Medicion m : mediciones) {
+	    			System.out.println(String.format("Fecha: '%s' Peso: '%s'", m.getFecha(), m.getPeso()));
+	      		}
+    			System.out.println(String.format("Peso Actual: '%s'", this.pesoActual));
+    			System.out.println(String.format("Peso Ideal: '%s'", ((ObjetivoBajar) objetivo).getPesoIdeal()));
+	    	}
+	    	else if (objetivo instanceof ObjetivoMantener) {
+	    		for (Medicion m : mediciones) {
+	    			System.out.println(String.format("Fecha: '%s' Peso: '%s'", m.getFecha(), m.getPeso()));
+		      	}
+    			System.out.println(String.format("Peso Actual: '%s'", this.pesoActual));
+    			System.out.println(String.format("Peso Inicial: '%s'", ((ObjetivoMantener) objetivo).getPesoInicial()));
+	    	}
+	    	else if (objetivo instanceof ObjetivoTonificar) {
+	    		for (Medicion m : mediciones) {
+	    			System.out.println(String.format("Fecha: '%s' Masa Muscular: '%s' Grasa Corporal: '%s'", m.getFecha(), m.getMasaMuscular(), m.getGrasaCorporal()));
+	    		}
+    			System.out.println(String.format("Masa Muscular Actual: '%s' Grasa Corporal Actual: '%s' ", this.masaCorporalActual, this.grasaCorporalActual));
+    			System.out.println(String.format("Masa Muscular Ideal: '%s' Grasa Corporal Ideal: '%s' ", ((ObjetivoTonificar) objetivo).getMasaMuscularIdeal(),((ObjetivoTonificar) objetivo).getGrasaCorporalIdeal()));
+	    	}
+    	}
+    	System.out.println("No tienes objetivo definido, aquí están tu historial de mediciones completo.");
+    	
     }
 
     public void registrarEjercicioCompletado(EjercicioConcretoRealizado ejercicioCompletado) {

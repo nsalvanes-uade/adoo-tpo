@@ -7,7 +7,11 @@ public class TrofeoDedicacion extends Trofeo {
 
     @Override
     public boolean cumpleCondiciones(Socio contexto) {
-        //TODO: evaluar condiciones
-        return false;
+        //REVIEW: evaluar condiciones
+    	/*
+    	 * reviso el objetivo y luego le pregunto si se cumplió
+    	 */
+    	contexto.getObjetivo().revisarObjetivo(contexto);
+        return contexto.getObjetivo().isCumplido();
     }
 }

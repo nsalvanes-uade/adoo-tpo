@@ -25,3 +25,8 @@ replay_pid*
 
 .pre-commit-config.yaml
 .idea
+
+.classpath
+.project
+.settings
+target/
