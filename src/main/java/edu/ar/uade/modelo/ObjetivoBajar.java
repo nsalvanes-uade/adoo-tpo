@@ -13,6 +13,10 @@ public class ObjetivoBajar extends Objetivo {
     public ObjetivoBajar(String descripcion) {
         super(descripcion);
     }
+    
+    public int getPesoIdeal() {
+    	return this.pesoIdeal;
+    }
 
     @Override
     public void revisarObjetivo(Socio socio) {

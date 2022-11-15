@@ -15,6 +15,10 @@ public class ObjetivoMantener extends Objetivo {
     public ObjetivoMantener(String descripcion) {
         super(descripcion);
     }
+    
+    public int getPesoInicial() {
+    	return this.pesoInicial;
+    }
 
     @Override
     public void revisarObjetivo(Socio socio) {
