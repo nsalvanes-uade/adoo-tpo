@@ -11,7 +11,6 @@ public class CatalogoEjercicios {
 
     private CatalogoEjercicios() {
         this.ejerciciosDisponibles = new ArrayList<>();
-        this.cargarEjercicios();
     }
 
     public static CatalogoEjercicios getInstancia() {
@@ -25,8 +24,9 @@ public class CatalogoEjercicios {
         return ejerciciosDisponibles;
     }
 
-    private void cargarEjercicios() {
-        //TODO: popular lista de ejercicios
+    private CatalogoEjercicios agregarEjercicio(EjercicioConcreto nuevoEjercicio) {
+        this.getEjerciciosDisponibles().add(nuevoEjercicio);
+        return this;
     }
 
 }

@@ -14,10 +14,7 @@ public abstract class Objetivo {
 
     public abstract void revisarObjetivo(Socio socio);
     public abstract void generarRutina(Socio socio);
-
-    protected void marcarCumplido() {
-        this.cumplido = true;
-    }
+    public abstract void verProgreso(Socio socio);
 
     public String getDescripcion() {
         return descripcion;
@@ -25,6 +22,10 @@ public abstract class Objetivo {
 
     public boolean isCumplido() {
         return cumplido;
+    }
+
+    public void marcarCumplido() {
+        this.cumplido = true;
     }
 
     public Notificador getNotificador() {

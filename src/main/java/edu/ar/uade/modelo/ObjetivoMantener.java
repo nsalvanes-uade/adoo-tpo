@@ -10,10 +10,10 @@ public class ObjetivoMantener extends Objetivo {
 
 	private int pesoInicial;
 	private int margenUnidadesPeso;
-	
-    //REVIEW: Pendiente
-    public ObjetivoMantener(String descripcion) {
+
+    public ObjetivoMantener(String descripcion, int margenUnidadesPeso) {
         super(descripcion);
+        this.margenUnidadesPeso = margenUnidadesPeso;
     }
     
     public int getPesoInicial() {
@@ -22,7 +22,9 @@ public class ObjetivoMantener extends Objetivo {
 
     @Override
     public void revisarObjetivo(Socio socio) {
-    	if(socio.getPesoActual()<=pesoInicial+margenUnidadesPeso && socio.getPesoActual()>=pesoInicial-margenUnidadesPeso){
+    	if(socio.getRutinaDiaria().getEjerciciosRealizados().size()>=socio.getRutinaDiaria().getEjercicios().size()
+            && socio.getPesoActual()<=pesoInicial+margenUnidadesPeso
+            && socio.getPesoActual()>=pesoInicial-margenUnidadesPeso){
             this.marcarCumplido();
             this.getNotificador().enviarNotificacion(
                 socio,
@@ -35,13 +37,19 @@ public class ObjetivoMantener extends Objetivo {
     public void generarRutina(Socio socio) {
     	this.pesoInicial = (int) socio.getPesoActual();
     	List<EjercicioConcreto> ejerciciosDisponibles =
-                CatalogoEjercicios.getInstancia().getEjerciciosDisponibles()
-                    .stream()
-                    .filter(e -> e.getNivelAerobico()<=4 && e.getNivelAerobico()>=2)
-                    .filter(e -> ExigenciaMuscular.BAJO.equals(e.getNivelMuscular()) || ExigenciaMuscular.MEDIO.equals(e.getNivelMuscular()))
-                        .map(EjercicioConcreto::new)
-                    .collect(Collectors.toList());
-            //TODO: Como limitar el tiempo de cada día de entrenamiento a entre 45 min y 1 hora y 20?
-            socio.setRutinaDiaria(new Rutina(Collections.unmodifiableList(ejerciciosDisponibles)));
+            CatalogoEjercicios.getInstancia().getEjerciciosDisponibles()
+                .stream()
+                .filter(e -> e.getNivelAerobico()<=4 && e.getNivelAerobico()>=2)
+                .filter(e -> ExigenciaMuscular.BAJO.equals(e.getNivelMuscular()) || ExigenciaMuscular.MEDIO.equals(e.getNivelMuscular()))
+                    .map(EjercicioConcreto::new)
+                .collect(Collectors.toList());
+        socio.setRutinaDiaria(new Rutina(Collections.unmodifiableList(ejerciciosDisponibles)));
     }
+
+    @Override
+    public void verProgreso(Socio socio) {
+        System.out.println(String.format("Peso Actual: '%s'", socio.getPesoActual()));
+        System.out.println(String.format("Peso Inicial: '%s'", this.getPesoInicial()));
+    }
+
 }
