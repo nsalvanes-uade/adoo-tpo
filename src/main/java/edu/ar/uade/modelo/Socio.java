@@ -170,7 +170,7 @@ public class Socio {
         this.trofeos = trofeos;
     }
 
-    public ILoginAdapter getLogin() {
-        return login;
+    public boolean autenticarse(String password) {
+        return login.autenticarse(this.getUserName(), password);
     }
 }

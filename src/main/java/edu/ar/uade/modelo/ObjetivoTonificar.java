@@ -15,8 +15,8 @@ public class ObjetivoTonificar extends Objetivo {
 
     private ICalculadorIdealExternoAdapter servicioCalculador;
 
-    public ObjetivoTonificar(String descripcion, ICalculadorIdealExternoAdapter servicioCalculador) {
-        super(descripcion);
+    public ObjetivoTonificar(ICalculadorIdealExternoAdapter servicioCalculador) {
+        super("Tonificar cuerpo");
         this.servicioCalculador = servicioCalculador;
     }
     
