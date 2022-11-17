@@ -10,8 +10,8 @@ public class ObjetivoBajar extends Objetivo {
 
     private int pesoIdeal;
 
-    public ObjetivoBajar(String descripcion) {
-        super(descripcion);
+    public ObjetivoBajar() {
+        super("Bajar de peso");
     }
     
     public int getPesoIdeal() {

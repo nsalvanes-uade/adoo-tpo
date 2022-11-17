@@ -11,8 +11,8 @@ public class ObjetivoMantener extends Objetivo {
 	private int pesoInicial;
 	private int margenUnidadesPeso;
 
-    public ObjetivoMantener(String descripcion, int margenUnidadesPeso) {
-        super(descripcion);
+    public ObjetivoMantener(int margenUnidadesPeso) {
+        super("Mantener la figura");
         this.margenUnidadesPeso = margenUnidadesPeso;
     }
     
