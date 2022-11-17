@@ -9,17 +9,18 @@ public class TrofeoConstancia extends Trofeo {
 
     @Override
     public boolean cumpleCondiciones(Socio contexto) {
-        //REVIEW: evaluar condiciones
     	List<EjercicioConcretoRealizado> ejerciciosRealizados = contexto.getRutinaDiaria().getEjerciciosRealizados();
+		List<Ejercicio> ejercicios = contexto.getRutinaDiaria().getEjercicios();
+
+		if (ejercicios.size() > ejerciciosRealizados.size())
+			return false;
+
     	for (EjercicioConcretoRealizado e : ejerciciosRealizados) {
     		if (e.getSeriesLogradas() < e.getEjercicio().getCantidadSeries()
     				|| e.getRepeticionesLogradas() < e.getEjercicio().getRepeticiones()
     				|| e.getPesoLevantado() < e.getEjercicio().getPesoAsignado())
     			return false;
     	}
-    	List<Ejercicio> ejercicios = contexto.getRutinaDiaria().getEjercicios();
-    	if (ejercicios.size() == ejerciciosRealizados.size())
-    		return true;
-    	return false;
+    	return true;
     }
 }

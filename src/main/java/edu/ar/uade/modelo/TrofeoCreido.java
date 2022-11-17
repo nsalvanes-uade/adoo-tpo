@@ -11,11 +11,6 @@ public class TrofeoCreido extends Trofeo {
 
     @Override
     public boolean cumpleCondiciones(Socio contexto) {
-    	//REVIEW: evaluar condiciones
-    	/*
-    	 * obtengo todas las mediciones y las filtro para que queden solo las de este mes
-    	 * después las cuento y si son 3 o más devuelvo true.
-    	 */
         List<Medicion> medicionesEsteMes =
             contexto.getMediciones()
             	.stream()

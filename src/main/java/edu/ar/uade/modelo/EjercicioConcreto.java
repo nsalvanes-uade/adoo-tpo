@@ -40,7 +40,11 @@ public class EjercicioConcreto extends Ejercicio {
 
     @Override
     public void mostrar() {
-        //TODO: Implementar
+        System.out.println(String.format("Ejercicio %s", this.getNombre()));
+        System.out.println(String.format("- Valores asignados: %d series de %d repeticiones c/u, con %f kg.",
+            this.getCantidadSeries(), this.getRepeticiones(), this.getPesoAsignado())
+        );
+        System.out.println(String.format("- Link a video demostrativo: %s", this.getVideo().getRutaArchivo()));
     }
 
     @Override

@@ -2,6 +2,7 @@ package edu.ar.uade.modelo;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Objects;
 
 public abstract class Trofeo {
 
@@ -25,7 +26,7 @@ public abstract class Trofeo {
             new TrofeoCreido(),
             new TrofeoDedicacion()
         ).forEach(trofeo -> {
-            if(trofeo.cumpleCondiciones(socio)){
+            if(!socio.getTrofeos().contains(trofeo) && trofeo.cumpleCondiciones(socio)){
                 socio.getTrofeos().add(trofeo);
                 notificador.enviarNotificacion(
                     socio,
@@ -45,5 +46,18 @@ public abstract class Trofeo {
 
     public String getDescripcion() {
         return descripcion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Trofeo trofeo = (Trofeo) o;
+        return nombre.equals(trofeo.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre);
     }
 }

@@ -53,6 +53,18 @@ public class ObjetivoTonificar extends Objetivo {
         socio.setRutinaDiaria(new Rutina(Collections.unmodifiableList(ejerciciosDisponibles)));
     }
 
+    @Override
+    public void verProgreso(Socio socio) {
+        System.out.println(
+            String.format("Masa Muscular Actual: '%s' Grasa Corporal Actual: '%s' ",
+                    socio.getMasaCorporalActual(), socio.getGrasaCorporalActual())
+        );
+        System.out.println(
+            String.format("Masa Muscular Ideal: '%s' Grasa Corporal Ideal: '%s' ",
+                    this.getMasaMuscularIdeal(), this.getGrasaCorporalIdeal())
+        );
+    }
+
     private void calcularIdeal(float pesoActual, float alturaActual, SexoBiologico sexo) {
         this.masaMuscularIdeal = servicioCalculador.calcularMasaMuscular(pesoActual, alturaActual, sexo);
         this.grasaCorporalIdeal = servicioCalculador.calcularGrasaCorporal(pesoActual, alturaActual, sexo);
