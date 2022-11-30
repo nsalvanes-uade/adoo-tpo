@@ -1,43 +1,59 @@
 package edu.ar.uade.modelo;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Rutina {
 
-    private List<Ejercicio> ejercicios;
-    private LocalDate fechaFin;
+    public static final int DURACION_SEMANAS = 4;
 
-    //Se utiliza una lista para facilitar implementación
-    private List<EjercicioConcretoRealizado> ejerciciosRealizados;
+    private List<DiaDeEntrenamiento> entrenamientos;
 
-    public Rutina(List<Ejercicio> ejercicios) {
-        this.ejercicios = ejercicios;
-        this.fechaFin = LocalDateTime.now().plusWeeks(4).toLocalDate();
-        this.ejerciciosRealizados = new ArrayList<>();
+    private int cantidadDiasEntrenados;
+    private DiaDeEntrenamiento ultimoEntrenamientoComenzado;
+
+    public Rutina(List<DiaDeEntrenamiento> entrenamientos) {
+        this.entrenamientos = entrenamientos;
+        this.cantidadDiasEntrenados = 0;
     }
 
-    public void mostrarEjercicios() {
-        this.ejercicios.forEach(Ejercicio::mostrar);
+    public DiaDeEntrenamiento comenzarEntrenamientoDiario() {
+        this.ultimoEntrenamientoComenzado = this.getEntrenamientos().get(cantidadDiasEntrenados);
+        this.cantidadDiasEntrenados++;
+        ultimoEntrenamientoComenzado.iniciar();
+        System.out.println(ultimoEntrenamientoComenzado);
+        return ultimoEntrenamientoComenzado;
+    }
+
+    public void finalizarEntrenamientoDiario() {
+        ultimoEntrenamientoComenzado.finalizar();
     }
 
     public void reforzar(){
-        this.ejercicios.forEach(Ejercicio::reforzar);
+        this.getEntrenamientos()
+                .subList(cantidadDiasEntrenados, this.getEntrenamientos().size())
+                .forEach(e -> e.getEjercicios().forEach(Ejercicio::reforzar));
     }
 
-    public void setEjercicios(List<Ejercicio> ejercicios) {
-        this.ejercicios = ejercicios;
+    public boolean isFinalizada() {
+        return cantidadDiasEntrenados >= entrenamientos.size()
+            && ultimoEntrenamientoComenzado.isFinalizado();
     }
 
-    public List<Ejercicio> getEjercicios() {
-        return ejercicios;
+    public boolean isCumplida() {
+        return isFinalizada()
+            && entrenamientos.stream().filter(e -> !e.isCumplido()).findAny().isEmpty();
     }
-    public LocalDate getFechaFin() {
-        return fechaFin;
+
+    public List<DiaDeEntrenamiento> getEntrenamientos() {
+        return entrenamientos;
     }
-    public List<EjercicioConcretoRealizado> getEjerciciosRealizados() {
-        return ejerciciosRealizados;
+
+    public int getCantidadDiasEntrenados() {
+        return cantidadDiasEntrenados;
     }
+
+    public DiaDeEntrenamiento getUltimoEntrenamientoComenzado() {
+        return this.ultimoEntrenamientoComenzado;
+    }
+
 }

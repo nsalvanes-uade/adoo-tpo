@@ -1,12 +1,9 @@
 package edu.ar.uade.modelo;
 
 import edu.ar.uade.modelo.enumeradores.ExigenciaMuscular;
-import edu.ar.uade.modelo.enumeradores.SexoBiologico;
 import edu.ar.uade.servicios.ICalculadorIdealExternoAdapter;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ObjetivoTonificar extends Objetivo {
 
@@ -16,41 +13,21 @@ public class ObjetivoTonificar extends Objetivo {
     private ICalculadorIdealExternoAdapter servicioCalculador;
 
     public ObjetivoTonificar(ICalculadorIdealExternoAdapter servicioCalculador) {
-        super("Tonificar cuerpo");
+        super("Tonificar cuerpo", 120, 150);
         this.servicioCalculador = servicioCalculador;
     }
-    
-    public float getMasaMuscularIdeal() {
-    	return this.masaMuscularIdeal;
-    }
-    
-    public float getGrasaCorporalIdeal() {
-    	return this.grasaCorporalIdeal;
+
+    @Override
+    protected void calcularIdeal(Socio socio) {
+        this.masaMuscularIdeal = servicioCalculador.calcularMasaMuscular(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
+        this.grasaCorporalIdeal = servicioCalculador.calcularGrasaCorporal(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
     }
 
     @Override
-    public void revisarObjetivo(Socio socio) {
-        if(socio.getMasaCorporalActual()>=masaMuscularIdeal && socio.getGrasaCorporalActual()<=grasaCorporalIdeal){
-            this.marcarCumplido();
-            this.getNotificador().enviarNotificacion(
-                    socio,
-                    "Felicitaciones! Objetivo bajar de tonificar cumplido. Sugerimos cambiar objetivo a 'Mantener Figura'"
-            );
-        }
-    }
-
-    @Override
-    public void generarRutina(Socio socio) {
-        calcularIdeal(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
-        List<EjercicioConcreto> ejerciciosDisponibles =
-            CatalogoEjercicios.getInstancia().getEjerciciosDisponibles()
-                .stream()
-                .filter(e -> e.getNivelAerobico()<=4)
-                .filter(e -> ExigenciaMuscular.ALTO.equals(e.getNivelMuscular()))
-                    .map(EjercicioConcreto::new)
-                .collect(Collectors.toList());
-        //TODO: Como limitar el tiempo de cada día de entrenamiento a entre 2 y 2 horas y media?
-        socio.setRutinaDiaria(new Rutina(Collections.unmodifiableList(ejerciciosDisponibles)));
+    protected Stream<Ejercicio> filtrarEjercicios(Stream<Ejercicio> ejerciciosDisponibles) {
+        return ejerciciosDisponibles
+            .filter(e -> e.getNivelAerobico()<=4)
+            .filter(e -> ExigenciaMuscular.ALTO.equals(e.getNivelMuscular()));
     }
 
     @Override
@@ -65,9 +42,23 @@ public class ObjetivoTonificar extends Objetivo {
         );
     }
 
-    private void calcularIdeal(float pesoActual, float alturaActual, SexoBiologico sexo) {
-        this.masaMuscularIdeal = servicioCalculador.calcularMasaMuscular(pesoActual, alturaActual, sexo);
-        this.grasaCorporalIdeal = servicioCalculador.calcularGrasaCorporal(pesoActual, alturaActual, sexo);
+    @Override
+    public void revisarObjetivo(Socio socio) {
+        if(socio.getMasaCorporalActual()>=masaMuscularIdeal && socio.getGrasaCorporalActual()<=grasaCorporalIdeal){
+            this.marcarCumplido();
+            this.getNotificador().enviarNotificacion(
+                    socio,
+                    "Felicitaciones! Objetivo bajar de tonificar cumplido. Sugerimos cambiar objetivo a 'Mantener Figura'"
+            );
+        }
+    }
+
+    public float getMasaMuscularIdeal() {
+        return this.masaMuscularIdeal;
+    }
+
+    public float getGrasaCorporalIdeal() {
+        return this.grasaCorporalIdeal;
     }
 
 }
