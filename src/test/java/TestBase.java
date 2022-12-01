@@ -28,6 +28,8 @@ public abstract class TestBase {
             null, Arrays.asList(DiaSemana.LUN, DiaSemana.MIE, DiaSemana.SAB),
             new LoginAdaptado(), new MedidorAdaptado()
         );
+        socioEjemplo.agregarObservador(new ObservadorTrofeoCreido(socioEjemplo));
+
         controlador = new EntrenamientoControlador(Arrays.asList(socioEjemplo));
         outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));

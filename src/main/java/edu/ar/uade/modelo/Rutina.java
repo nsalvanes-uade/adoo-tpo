@@ -1,5 +1,6 @@
 package edu.ar.uade.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rutina {
@@ -11,9 +12,12 @@ public class Rutina {
     private int cantidadDiasEntrenados;
     private DiaDeEntrenamiento ultimoEntrenamientoComenzado;
 
+    private List<IObserverRutina> observadores;
+
     public Rutina(List<DiaDeEntrenamiento> entrenamientos) {
         this.entrenamientos = entrenamientos;
         this.cantidadDiasEntrenados = 0;
+        this.observadores = new ArrayList<>();
     }
 
     public DiaDeEntrenamiento comenzarEntrenamientoDiario() {
@@ -26,6 +30,7 @@ public class Rutina {
 
     public void finalizarEntrenamientoDiario() {
         ultimoEntrenamientoComenzado.finalizar();
+        this.observadores.forEach(o -> o.notificarEntrenamientoFinalizado(this));
     }
 
     public void reforzar(){
@@ -42,6 +47,13 @@ public class Rutina {
     public boolean isCumplida() {
         return isFinalizada()
             && entrenamientos.stream().filter(e -> !e.isCumplido()).findAny().isEmpty();
+    }
+    public void agregarObservador(IObserverRutina observador) {
+        this.observadores.add(observador);
+    }
+
+    public void eliminarObservador(IObserverRutina observador) {
+        this.observadores.remove(observador);
     }
 
     public List<DiaDeEntrenamiento> getEntrenamientos() {

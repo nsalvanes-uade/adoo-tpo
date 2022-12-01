@@ -16,12 +16,15 @@ public abstract class Objetivo {
     private Rutina rutina;
     private Notificador notificador;
 
+    private List<IObserverObjetivo> observadores;
+
     public Objetivo(String descripcion, int minDuracionDiaEntrenamiento, int maxDuracionDiaEntrenamiento) {
         this.descripcion = descripcion;
         this.minDuracionDiaEntrenamiento = minDuracionDiaEntrenamiento;
         this.maxDuracionDiaEntrenamiento = maxDuracionDiaEntrenamiento;
         this.cumplido = false;
         this.notificador = new Notificador();
+        this.observadores = new ArrayList<>();
     }
 
     public void generarRutina(Socio socio) {
@@ -35,6 +38,7 @@ public abstract class Objetivo {
                 ejerciciosFiltrados
             )
         );
+        this.rutina.agregarObservador(new ObservadorTrofeoConstancia(socio));
     }
 
     protected abstract void calcularIdeal(Socio socio);
@@ -87,6 +91,14 @@ public abstract class Objetivo {
     public abstract void revisarObjetivo(Socio socio);
     public abstract void verProgreso(Socio socio);
 
+    public void agregarObservador(IObserverObjetivo observador) {
+        this.observadores.add(observador);
+    }
+
+    public void eliminarObservador(IObserverObjetivo observador) {
+        this.observadores.remove(observador);
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -97,6 +109,7 @@ public abstract class Objetivo {
 
     protected void marcarCumplido() {
         this.cumplido = true;
+        this.observadores.forEach(o -> o.notificarObjetivoCumplido(this));
     }
 
     public Rutina getRutina() {

@@ -34,6 +34,7 @@ public class EntrenamientoControlador {
                 case MANTENER -> socio.setObjetivo(new ObjetivoMantener((int) parametrosObjetivo[0]));
                 case TONIFICAR -> socio.setObjetivo(new ObjetivoTonificar(new CalculadorIdealExternoAdaptado()));
             }
+            socio.getObjetivo().agregarObservador(new ObservadorTrofeoDedicacion(socio));
             socio.generarRutina();
             return socio.getObjetivo().getRutina();
         }

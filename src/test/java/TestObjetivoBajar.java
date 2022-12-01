@@ -68,9 +68,6 @@ public class TestObjetivoBajar extends TestBase {
         assertTrue(outputStreamCaptor.toString().contains("Felicitaciones! Has recibido el trofeo Constancia"));
     }
 
-    //TODO: Test objetivo cumplido + trofeo dedicacion
-    //TODO: Tests objetivo mantener, objetivo tonificar
-
     @Test
     @Order(4)
     public void testMedicion() {
@@ -91,9 +88,6 @@ public class TestObjetivoBajar extends TestBase {
     @Test
     @Order(5)
     public void testTrofeoCreido() {
-        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStreamCaptor));
-
         testMedicion();
         testMedicion();
 
@@ -101,6 +95,26 @@ public class TestObjetivoBajar extends TestBase {
             t -> t.getNombre().equals("Creído")
         ).findAny().isPresent());
         assertTrue(outputStreamCaptor.toString().contains("Felicitaciones! Has recibido el trofeo Creído"));
+    }
+
+    @Test
+    @Order(6)
+    public void testCumplirObjetivo() {
+        assertFalse(socioEjemplo.getObjetivo().isCumplido());
+
+        String userInput = String.format("70%s20%s15",
+                System.lineSeparator(),
+                System.lineSeparator()
+        );
+        System.setIn(new ByteArrayInputStream(userInput.getBytes()));
+
+        controlador.registrarMedicion(socioEjemplo.getUserName());
+
+        socioEjemplo.getObjetivo().revisarObjetivo(socioEjemplo);
+
+        assertTrue(socioEjemplo.getObjetivo().isCumplido());
+        assertTrue(outputStreamCaptor.toString().contains("Objetivo bajar de peso cumplido"));
+        assertTrue(outputStreamCaptor.toString().contains("Felicitaciones! Has recibido el trofeo Dedicación"));
     }
 
 }

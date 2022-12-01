@@ -5,8 +5,4 @@ public class TrofeoConstancia extends Trofeo {
         super("Constancia", "Trofeo por cumplir a la perfección las rutinas");
     }
 
-    @Override
-    public boolean cumpleCondiciones(Socio contexto) {
-		return contexto.getObjetivo().getRutina().isCumplida();
-    }
 }

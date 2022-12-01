@@ -26,6 +26,8 @@ public class Socio {
     private ILoginAdapter login;
     private IMedidorAdapter medidor;
 
+    private List<IObserverSocio> observadores;
+
     public Socio(String userName, int edad, SexoBiologico sexo, float altura, float pesoActual, float masaCorporalActual,
                  float grasaCorporalActual, Objetivo objetivo, List<DiaSemana> diasDeEntrenamiento, ILoginAdapter login, IMedidorAdapter medidor) {
         this.userName = userName;
@@ -41,6 +43,7 @@ public class Socio {
         this.trofeos = new ArrayList<>();
         this.login = login;
         this.medidor = medidor;
+        this.observadores = new ArrayList<>();
     }
 
     public boolean autenticarse(String password) {
@@ -53,7 +56,8 @@ public class Socio {
         this.masaCorporalActual = medicion.getMasaMuscular();
         this.grasaCorporalActual = medicion.getGrasaCorporal();
         this.mediciones.add(medicion);
-        Trofeo.chequearPremios(this);
+
+        this.observadores.forEach(o -> o.notificarMedicion(this));
     }
 
     public void generarRutina() {
@@ -83,7 +87,14 @@ public class Socio {
     public void finalizarEntrenamientoDiario() {
         this.objetivo.getRutina().finalizarEntrenamientoDiario();
         this.objetivo.revisarObjetivo(this);
-        Trofeo.chequearPremios(this);
+    }
+
+    public void agregarObservador(IObserverSocio observador) {
+        this.observadores.add(observador);
+    }
+
+    public void eliminarObservador(IObserverSocio observador) {
+        this.observadores.remove(observador);
     }
 
     public String getUserName() {
