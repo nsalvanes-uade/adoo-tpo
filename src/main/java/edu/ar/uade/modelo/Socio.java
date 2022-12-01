@@ -1,5 +1,6 @@
 package edu.ar.uade.modelo;
 
+import edu.ar.uade.modelo.enumeradores.DiaSemana;
 import edu.ar.uade.modelo.enumeradores.SexoBiologico;
 import edu.ar.uade.servicios.ILoginAdapter;
 import edu.ar.uade.servicios.IMedidorAdapter;
@@ -18,8 +19,7 @@ public class Socio {
     private float grasaCorporalActual;
 
     private Objetivo objetivo;
-    private int diasDeEntrenamiento;
-    private Rutina rutinaDiaria;
+    private List<DiaSemana> diasDeEntrenamiento;
     private List<Medicion> mediciones;
     private List<Trofeo> trofeos;
 
@@ -27,7 +27,7 @@ public class Socio {
     private IMedidorAdapter medidor;
 
     public Socio(String userName, int edad, SexoBiologico sexo, float altura, float pesoActual, float masaCorporalActual,
-                 float grasaCorporalActual, Objetivo objetivo, int diasDeEntrenamiento, ILoginAdapter login, IMedidorAdapter medidor) {
+                 float grasaCorporalActual, Objetivo objetivo, List<DiaSemana> diasDeEntrenamiento, ILoginAdapter login, IMedidorAdapter medidor) {
         this.userName = userName;
         this.edad = edad;
         this.sexo = sexo;
@@ -43,8 +43,8 @@ public class Socio {
         this.medidor = medidor;
     }
 
-    public void generarRutina() {
-        this.objetivo.generarRutina(this);
+    public boolean autenticarse(String password) {
+        return login.autenticarse(this.getUserName(), password);
     }
 
     public void registrarMedicion() {
@@ -56,20 +56,32 @@ public class Socio {
         Trofeo.chequearPremios(this);
     }
 
+    public void generarRutina() {
+        this.objetivo.generarRutina(this);
+    }
+
     public void verProgreso() {
-        this.getMediciones().forEach(m -> System.out.println(
+        this.mediciones.forEach(m -> System.out.println(
             String.format("Fecha: '%s' Masa Muscular: '%s' Grasa Corporal: '%s'",
                     m.getFecha(), m.getMasaMuscular(), m.getGrasaCorporal())
         ));
-    	if (this.getObjetivo() != null) {
-	    	this.getObjetivo().verProgreso(this);
+    	if (this.objetivo != null) {
+            this.objetivo.verProgreso(this);
     	} else {
             System.out.println("Aún no tienes un objetivo definido.");
         }
     }
 
-    public void registrarEjercicioCompletado(EjercicioConcretoRealizado ejercicioCompletado) {
-        this.rutinaDiaria.getEjerciciosRealizados().add(ejercicioCompletado);
+    public DiaDeEntrenamiento comenzarEntrenamientoDiario() {
+        return this.objetivo.getRutina().comenzarEntrenamientoDiario();
+    }
+
+    public void registrarEjercicioRealizado(EjercicioRealizado ejercicio) {
+        this.objetivo.getRutina().getUltimoEntrenamientoComenzado().getEjerciciosRealizados().add(ejercicio);
+    }
+
+    public void finalizarEntrenamientoDiario() {
+        this.objetivo.getRutina().finalizarEntrenamientoDiario();
         this.objetivo.revisarObjetivo(this);
         Trofeo.chequearPremios(this);
     }
@@ -138,20 +150,12 @@ public class Socio {
         this.objetivo = objetivo;
     }
 
-    public int getDiasDeEntrenamiento() {
+    public List<DiaSemana> getDiasDeEntrenamiento() {
         return diasDeEntrenamiento;
     }
 
-    public void setDiasDeEntrenamiento(int diasDeEntrenamiento) {
+    public void setDiasDeEntrenamiento(List<DiaSemana> diasDeEntrenamiento) {
         this.diasDeEntrenamiento = diasDeEntrenamiento;
-    }
-
-    public Rutina getRutinaDiaria() {
-        return rutinaDiaria;
-    }
-
-    public void setRutinaDiaria(Rutina rutinaDiaria) {
-        this.rutinaDiaria = rutinaDiaria;
     }
 
     public List<Medicion> getMediciones() {
@@ -170,7 +174,4 @@ public class Socio {
         this.trofeos = trofeos;
     }
 
-    public boolean autenticarse(String password) {
-        return login.autenticarse(this.getUserName(), password);
-    }
 }

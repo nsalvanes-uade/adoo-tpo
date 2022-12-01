@@ -7,7 +7,7 @@ public class CatalogoEjercicios {
 
     private static CatalogoEjercicios instancia;
 
-    private List<EjercicioConcreto> ejerciciosDisponibles;
+    private List<Ejercicio> ejerciciosDisponibles;
 
     private CatalogoEjercicios() {
         this.ejerciciosDisponibles = new ArrayList<>();
@@ -20,11 +20,11 @@ public class CatalogoEjercicios {
         return instancia;
     }
 
-    public List<EjercicioConcreto> getEjerciciosDisponibles() {
+    public List<Ejercicio> getEjerciciosDisponibles() {
         return ejerciciosDisponibles;
     }
 
-    private CatalogoEjercicios agregarEjercicio(EjercicioConcreto nuevoEjercicio) {
+    public CatalogoEjercicios agregarEjercicio(Ejercicio nuevoEjercicio) {
         this.getEjerciciosDisponibles().add(nuevoEjercicio);
         return this;
     }
