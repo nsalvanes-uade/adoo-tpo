@@ -98,9 +98,9 @@ public class Ejercicio {
 
     @Override
     public String toString() {
-        return String.format("\nEjercicio %s\n" +
-                        "- Valores asignados: %d series de %d repeticiones c/u, con %f kg.\n" +
-                        "- Link a video demostrativo: %s",
+        return String.format("\n\t\tEjercicio %s\n" +
+                        "\t\t- Valores asignados: %d series de %d repeticiones c/u, con %f kg.\n" +
+                        "\t\t- Link a video demostrativo: %s",
                 this.getNombre(),
                 this.getCantidadSeries(), this.getRepeticiones(), this.getPesoAsignado(),
                 this.getVideo().getRutaArchivo());

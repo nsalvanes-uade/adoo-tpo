@@ -2,31 +2,24 @@ package edu.ar.uade.modelo;
 
 import edu.ar.uade.modelo.enumeradores.SexoBiologico;
 
-import java.util.stream.Stream;
-
 public class ObjetivoBajar extends Objetivo {
 
     private int pesoIdeal;
 
     public ObjetivoBajar() {
-        super("Bajar de peso", 60, 90);
+        super("Bajar de peso");
     }
 
     @Override
-    protected void calcularIdeal(Socio socio) {
-        float pesoPorAlturaIdeal = (socio.getAltura() - 1 ) * 100;
-        if (SexoBiologico.FEMENINO.equals(socio.getSexo())) {
-            pesoPorAlturaIdeal *= 0.875f;
-        } else {
-            pesoPorAlturaIdeal -= 2;
-        }
-        this.pesoIdeal = Math.round(pesoPorAlturaIdeal);
-    }
-
-    @Override
-    protected Stream<Ejercicio> filtrarEjercicios(Stream<Ejercicio> ejerciciosDisponibles) {
-        return ejerciciosDisponibles
-            .filter(e -> e.getNivelAerobico()>=3);
+    public Rutina internalGenerarRutina(Socio socio) {
+        calcularIdeal(socio);
+        Rutina rutina = new Rutina();
+        rutina.calcularEntrenamiento(
+            socio.getDiasDeEntrenamiento().size(),
+            3,
+            new RangoNumerico(60, 90)
+        );
+        return rutina;
     }
 
     @Override
@@ -44,6 +37,16 @@ public class ObjetivoBajar extends Objetivo {
                 "Felicitaciones! Objetivo bajar de peso cumplido. Sugerimos cambiar objetivo a 'Mantener Figura'"
             );
         }
+    }
+
+    private void calcularIdeal(Socio socio) {
+        float pesoPorAlturaIdeal = (socio.getAltura() - 1 ) * 100;
+        if (SexoBiologico.FEMENINO.equals(socio.getSexo())) {
+            pesoPorAlturaIdeal *= 0.875f;
+        } else {
+            pesoPorAlturaIdeal -= 2;
+        }
+        this.pesoIdeal = Math.round(pesoPorAlturaIdeal);
     }
 
     public int getPesoIdeal() {

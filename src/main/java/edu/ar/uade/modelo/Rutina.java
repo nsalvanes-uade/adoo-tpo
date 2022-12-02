@@ -1,11 +1,13 @@
 package edu.ar.uade.modelo;
 
+import edu.ar.uade.modelo.enumeradores.ExigenciaMuscular;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Rutina {
 
-    public static final int DURACION_SEMANAS = 4;
+    private static final int DURACION_SEMANAS = 4;
 
     private List<DiaDeEntrenamiento> entrenamientos;
 
@@ -14,10 +16,42 @@ public class Rutina {
 
     private List<IObserverRutina> observadores;
 
-    public Rutina(List<DiaDeEntrenamiento> entrenamientos) {
-        this.entrenamientos = entrenamientos;
+    public Rutina() {
         this.cantidadDiasEntrenados = 0;
+        this.entrenamientos = new ArrayList<>();
         this.observadores = new ArrayList<>();
+    }
+
+    public void calcularEntrenamiento(int cantidadDias,
+                                      int nivelAerobicoMinimo,
+                                      RangoNumerico duracionEntrenamiento) {
+        for(int i = 0; i<cantidadDias*DURACION_SEMANAS ; i++) {
+            DiaDeEntrenamiento diaDeEntrenamiento = new DiaDeEntrenamiento();
+            diaDeEntrenamiento.generarEjercicios(nivelAerobicoMinimo, duracionEntrenamiento);
+            entrenamientos.add(diaDeEntrenamiento);
+        }
+    }
+
+    public void calcularEntrenamiento(int cantidadDias,
+                                      int nivelAerobicoMaximo,
+                                      List<ExigenciaMuscular> exigenciasPermitidas,
+                                      RangoNumerico duracionEntrenamiento) {
+        for(int i = 0; i<cantidadDias*DURACION_SEMANAS ; i++) {
+            DiaDeEntrenamiento diaDeEntrenamiento = new DiaDeEntrenamiento();
+            diaDeEntrenamiento.generarEjercicios(nivelAerobicoMaximo, exigenciasPermitidas, duracionEntrenamiento);
+            entrenamientos.add(diaDeEntrenamiento);
+        }
+    }
+
+    public void calcularEntrenamiento(int cantidadDias,
+                                      RangoNumerico rangoNivelAerobicoPermitido,
+                                      List<ExigenciaMuscular> exigenciasPermitidas,
+                                      RangoNumerico duracionEntrenamiento) {
+        for(int i = 0; i<cantidadDias*DURACION_SEMANAS ; i++) {
+            DiaDeEntrenamiento diaDeEntrenamiento = new DiaDeEntrenamiento();
+            diaDeEntrenamiento.generarEjercicios(rangoNivelAerobicoPermitido, exigenciasPermitidas, duracionEntrenamiento);
+            entrenamientos.add(diaDeEntrenamiento);
+        }
     }
 
     public DiaDeEntrenamiento comenzarEntrenamientoDiario() {

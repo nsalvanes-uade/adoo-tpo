@@ -3,8 +3,6 @@ import edu.ar.uade.modelo.*;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +16,7 @@ public class TestObjetivoBajar extends TestBase {
         assertEquals(ObjetivoBajar.class, socioEjemplo.getObjetivo().getClass());
         Rutina rutina = socioEjemplo.getObjetivo().getRutina();;
         assertEquals(
-            socioEjemplo.getDiasDeEntrenamiento().size()*Rutina.DURACION_SEMANAS,
+            socioEjemplo.getDiasDeEntrenamiento().size()*4,
             rutina.getEntrenamientos().size()
         );
         assertTrue(rutina.getEntrenamientos().stream()
@@ -98,7 +96,14 @@ public class TestObjetivoBajar extends TestBase {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
+    public void testVerProgreso() {
+        controlador.verProgreso(socioEjemplo.getUserName());
+        assertTrue(outputStreamCaptor.toString().contains("Peso Ideal:"));
+    }
+
+    @Test
+    @Order(8)
     public void testCumplirObjetivo() {
         assertFalse(socioEjemplo.getObjetivo().isCumplido());
 

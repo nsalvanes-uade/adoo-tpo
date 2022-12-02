@@ -84,6 +84,13 @@ public class EntrenamientoControlador {
         }
     }
 
+    public void verProgreso(String userName) {
+        Optional<Socio> busquedaSocio = buscarSocio(userName);
+        if(busquedaSocio.isPresent()){
+            busquedaSocio.get().verProgreso();
+        }
+    }
+
     private Optional<Socio> buscarSocio(String userName) {
         return socios.stream().filter(s -> s.getUserName().equals(userName)).findFirst();
     }

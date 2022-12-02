@@ -1,6 +1,6 @@
 package edu.ar.uade.modelo;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import edu.ar.uade.modelo.enumeradores.ExigenciaMuscular;
 
@@ -10,20 +10,22 @@ public class ObjetivoMantener extends Objetivo {
 	private int margenUnidadesPeso;
 
     public ObjetivoMantener(int margenUnidadesPeso) {
-        super("Mantener la figura", 45, 80);
+        super("Mantener la figura");
         this.margenUnidadesPeso = margenUnidadesPeso;
     }
 
     @Override
-    protected void calcularIdeal(Socio socio) {
+    public Rutina internalGenerarRutina(Socio socio) {
         this.pesoInicial = (int) socio.getPesoActual();
-    }
 
-    @Override
-    protected Stream<Ejercicio> filtrarEjercicios(Stream<Ejercicio> ejerciciosDisponibles) {
-    	return ejerciciosDisponibles
-            .filter(e -> e.getNivelAerobico()<=4 && e.getNivelAerobico()>=2)
-            .filter(e -> ExigenciaMuscular.BAJO.equals(e.getNivelMuscular()) || ExigenciaMuscular.MEDIO.equals(e.getNivelMuscular()));
+        Rutina rutina = new Rutina();
+        rutina.calcularEntrenamiento(
+            socio.getDiasDeEntrenamiento().size(),
+            new RangoNumerico(2, 4),
+            Arrays.asList(ExigenciaMuscular.BAJO, ExigenciaMuscular.MEDIO),
+            new RangoNumerico(45, 80)
+        );
+        return rutina;
     }
 
     @Override
