@@ -17,6 +17,8 @@ public abstract class TestBase {
 
     protected static EntrenamientoControlador controlador;
     protected static Socio socioEjemplo;
+
+    protected static PrintStream originalOutput;
     protected static ByteArrayOutputStream outputStreamCaptor;
 
     @BeforeAll
@@ -31,8 +33,16 @@ public abstract class TestBase {
         socioEjemplo.agregarObservador(new ObservadorTrofeoCreido(socioEjemplo));
 
         controlador = new EntrenamientoControlador(Arrays.asList(socioEjemplo));
+
+        originalOutput = System.out;
         outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @AfterEach
+    void printOutput() {
+        originalOutput.println(outputStreamCaptor.toString());
+        outputStreamCaptor.reset();
     }
 
     private static void cargarCatalogoEjercicios() {

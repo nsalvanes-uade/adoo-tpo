@@ -3,7 +3,7 @@ package edu.ar.uade.modelo;
 import edu.ar.uade.modelo.enumeradores.ExigenciaMuscular;
 import edu.ar.uade.servicios.ICalculadorIdealExternoAdapter;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 public class ObjetivoTonificar extends Objetivo {
 
@@ -13,21 +13,22 @@ public class ObjetivoTonificar extends Objetivo {
     private ICalculadorIdealExternoAdapter servicioCalculador;
 
     public ObjetivoTonificar(ICalculadorIdealExternoAdapter servicioCalculador) {
-        super("Tonificar cuerpo", 120, 150);
+        super("Tonificar cuerpo");
         this.servicioCalculador = servicioCalculador;
     }
 
     @Override
-    protected void calcularIdeal(Socio socio) {
-        this.masaMuscularIdeal = servicioCalculador.calcularMasaMuscular(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
-        this.grasaCorporalIdeal = servicioCalculador.calcularGrasaCorporal(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
-    }
+    public Rutina internalGenerarRutina(Socio socio) {
+        calcularIdeal(socio);
 
-    @Override
-    protected Stream<Ejercicio> filtrarEjercicios(Stream<Ejercicio> ejerciciosDisponibles) {
-        return ejerciciosDisponibles
-            .filter(e -> e.getNivelAerobico()<=4)
-            .filter(e -> ExigenciaMuscular.ALTO.equals(e.getNivelMuscular()));
+        Rutina rutina = new Rutina();
+        rutina.calcularEntrenamiento(
+            socio.getDiasDeEntrenamiento().size(),
+            4,
+            Arrays.asList(ExigenciaMuscular.ALTO),
+            new RangoNumerico(120, 150)
+        );
+        return rutina;
     }
 
     @Override
@@ -51,6 +52,11 @@ public class ObjetivoTonificar extends Objetivo {
                     "Felicitaciones! Objetivo bajar de tonificar cumplido. Sugerimos cambiar objetivo a 'Mantener Figura'"
             );
         }
+    }
+
+    private void calcularIdeal(Socio socio) {
+        this.masaMuscularIdeal = servicioCalculador.calcularMasaMuscular(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
+        this.grasaCorporalIdeal = servicioCalculador.calcularGrasaCorporal(socio.getPesoActual(), socio.getAltura(), socio.getSexo());
     }
 
     public float getMasaMuscularIdeal() {
